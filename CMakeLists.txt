@@ -15,6 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(FPR)
+add_definitions(-DDEBUG)
 target_include_directories(FPR
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

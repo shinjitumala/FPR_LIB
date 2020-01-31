@@ -2,12 +2,6 @@
 #include <functional>
 
 namespace FPR {
-#ifdef DEBUG
-const bool debug{true};
-#else
-const bool debug{false};
-#endif
-
 /**
  * Assert that does not use the pre processor.
  * @param condition Program will crash if this is not true.
@@ -17,6 +11,20 @@ const bool debug{false};
 inline void asrt(
     bool &&condition,
     std::function<void()> failure = []() {},
-    std::experimental::source_location loc = std::experimental::source_location::current());
+    std::experimental::source_location loc = std::experimental::source_location::current()) {
+#ifdef DEBUG
+    static const bool debug{true};
+#else
+    static const bool debug{false};
+#endif
 
+    if constexpr (debug) {
+        if (condition) {
+            return;
+        }
+
+        failure();
+        asm("INT3");
+    }
+}
 } // namespace FPR
