@@ -1,4 +1,4 @@
-#include <FPR/debug/level.h>
+#pragma once
 
 #include <iomanip>
 #include <iostream>

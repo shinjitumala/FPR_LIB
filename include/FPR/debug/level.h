@@ -1,5 +1,6 @@
-namespace FPR {
-class DebugLevel {
+#pragma once
+
+namespace fpr {
   protected:
     enum class Type {
     };

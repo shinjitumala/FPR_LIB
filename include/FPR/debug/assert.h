@@ -1,8 +1,11 @@
+#pragma once
+
 #include <experimental/source_location>
 #include <functional>
 
 #include <FPR/out/ansi_out.h>
 
+namespace fpr {
 /**
  * Assert that does not use the pre processor.
  * @param condition Program will crash if this is not true.
