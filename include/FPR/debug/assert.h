@@ -1,7 +1,8 @@
 #include <experimental/source_location>
 #include <functional>
 
-namespace FPR {
+#include <FPR/out/ansi_out.h>
+
 /**
  * Assert that does not use the pre processor.
  * @param condition Program will crash if this is not true.
@@ -23,7 +24,18 @@ inline void asrt(
             return;
         }
 
+        ANSI_Out{std::cerr} << ANSI_Out::State{
+                                   .bg = ANSI_Out::State::Color::BLACK,
+                                   .fg = ANSI_Out::State::Color::RED,
+                                   .e = ANSI_Out::State::Emphasis::BOLD}
+                            << ">> Assertion failed. Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << " " << loc.function_name() << "\n";
         failure();
+        ANSI_Out{std::cerr} << ANSI_Out::State{
+                                   .bg = ANSI_Out::State::Color::BLACK,
+                                   .fg = ANSI_Out::State::Color::RED,
+                                   .e = ANSI_Out::State::Emphasis::BOLD}
+                            << "\n<< Goodbye!" << std::endl;
+
         asm("INT3");
     }
 }
