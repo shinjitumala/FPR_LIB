@@ -14,6 +14,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+add_compile_options(
+   -Wall
+)
+
 add_library(FPR)
 add_definitions(-DDEBUG)
 target_include_directories(FPR
