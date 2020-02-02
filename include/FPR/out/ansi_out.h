@@ -109,7 +109,7 @@ class ANSI_Out {
     ANSI_Out &operator<<(const State &state) noexcept;
 };
 
-constexpr inline auto reset = []() -> const auto {
+constexpr inline auto reset = []() -> auto {
     ANSI_Out::State s;
     s.bg = ANSI_Out::State::Color::NONE;
     s.fg = ANSI_Out::State::Color::NONE;
