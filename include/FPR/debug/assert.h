@@ -4,6 +4,7 @@
 #include <functional>
 
 #include <FPR/debug/Logger.h>
+#include <string>
 
 namespace fpr {
 
@@ -39,14 +40,29 @@ constexpr auto cyn = []() {
     return Logger(Logger::Level::INFO, ANSI_Out::State::Color::CYAN);
 };
 
+constexpr auto print_location = [](const std::experimental::source_location &loc) -> std::string {
+    std::string s;
+    s += "Location: ";
+    s += loc.file_name();
+    s += ":";
+    s += loc.line();
+    s += ":";
+    s += loc.column();
+    s += " ";
+    s += loc.function_name();
+    s += "()\n";
+    return s;
+};
+
 /**
  * Assert that does not use the pre processor.
  * @param condition Program will crash if this is not true.
  * @param failure Actions to take before crashing. Defaults to 'Do nothing'.
  * @param loc Source location to be displayed if the assertion fails.
  */
-inline void asrt( bool &&condition, std::function<void()> failure = []() {},
-    std::experimental::source_location loc = std::experimental::source_location::current()) {
+inline void asrt(
+    bool &&condition, std::function<void()> failure = []() {},
+    const std::experimental::source_location &loc = std::experimental::source_location::current()) {
 #ifdef DEBUG
     static const bool debug{true};
 #else
@@ -58,7 +74,7 @@ inline void asrt( bool &&condition, std::function<void()> failure = []() {},
             return;
         }
 
-        fpr::err() << ">> Assertion failed. Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << " " << loc.function_name() << "\n";
+        fpr::err() << ">> Assertion failed. " << print_location(loc);
         failure();
         fpr::err() << "<< Goodbye!" << reset() << std::endl;
 
@@ -74,7 +90,7 @@ inline void asrt( bool &&condition, std::function<void()> failure = []() {},
  */
 inline void wasrt(
     bool &&condition, std::function<void()> warning = []() {},
-    std::experimental::source_location loc =
+    const std::experimental::source_location &loc =
         std::experimental::source_location::current()) {
 #ifdef DEBUG
 #undef DEBUG
@@ -88,7 +104,7 @@ inline void wasrt(
             return;
         }
 
-        fpr::warn() << ">> Warning. Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << " " << loc.function_name() << "\n";
+        fpr::warn() << ">> Warning. " << print_location(loc);
         warning();
         fpr::warn() << "<<" << reset() << std::endl;
     }
@@ -97,10 +113,12 @@ inline void wasrt(
 constexpr auto ui = []() {
     Logger::indent_level++;
 };
-constexpr auto di = [](std::experimental::source_location loc = std::experimental::source_location::current()) {
-    fpr::asrt(Logger::indent_level > 0, []() {
-        fpr::err() << "Negative indent!\n";
-    });
+constexpr auto di = [](const std::experimental::source_location &loc = std::experimental::source_location::current()) {
+    fpr::asrt(
+        Logger::indent_level > 0,
+        []() {
+            fpr::err() << "Negative indent!\n";
+        });
     Logger::indent_level--;
 };
 } // namespace fpr
