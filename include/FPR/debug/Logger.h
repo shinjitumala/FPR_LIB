@@ -42,7 +42,7 @@ class Logger : private ANSI_Out {
      * @return Logger& This Logger after the output.
      */
     template <class O, class = std::enable_if_t<is_ansi_streamable<O>::value>>
-    Logger &operator<<(O o) {
+    Logger &operator<<(const O &o) {
         if (is_logged) {
             ANSI_Out::operator<<(o);
         }
