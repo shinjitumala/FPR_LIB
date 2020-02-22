@@ -49,9 +49,10 @@ std::ostream &Logger::get_ostream(Level level) noexcept {
     case Level::MSG:
     case Level::INFO:
         return std::cout;
+    default:
     case Level::WARN:
     case Level::ERR:
-        return std::cout;
+        return std::cerr;
     }
 }
 } // namespace fpr
