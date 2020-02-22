@@ -33,7 +33,7 @@ Logger::Logger(Level level, State::Color color) noexcept
         }
     }
     *this << s;
-    for (int i{0}; i < indent_level; i++) {
+    for (uint i{0}; i < indent_level; i++) {
         *this << "\t";
     }
 }
