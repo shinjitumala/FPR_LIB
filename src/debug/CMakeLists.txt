@@ -1,3 +1,4 @@
 target_sources(FPR
-    PRIVATE Logger.cpp
+    PUBLIC assert.cpp
+    PUBLIC log.cpp
 )
