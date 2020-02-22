@@ -34,6 +34,7 @@ class ostreamable {
 
 /** ansicc out: Conveniece class for outputting colored text */
 class aout {
+  protected:
     std::ostream &os;
 
   public:
@@ -42,6 +43,8 @@ class aout {
      * @param out 
      */
     aout(ansicc cc, std::ostream &out = std::cout);
+    /** Disallow copy */
+    aout(const aout &) = delete;
     ~aout();
 
     /**
@@ -57,7 +60,7 @@ class aout {
     }
 
     using omanip = std::ostream &(&)(std::ostream &);
-    aout &operator<<(omanip o){
+    aout &operator<<(omanip o) {
         os << o;
         return *this;
     };
