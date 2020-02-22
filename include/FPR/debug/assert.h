@@ -31,7 +31,7 @@ constexpr auto print_location = [](const std::experimental::source_location loc)
  */
 #ifndef NDEBUG
 #define asrt(condition, action)                                         \
-    if (!condition) {                                                   \
+    if (!(condition)) {                                                 \
         std::cerr << "Assertion Failure: " << #condition << "\n"        \
                   << fpr::print_location(                               \
                          std::experimental::source_location::current()) \
@@ -54,7 +54,7 @@ constexpr auto print_location = [](const std::experimental::source_location loc)
  */
 #ifndef NDEBUG
 #define wsrt(condition, action)                                            \
-    if (!condition) {                                                      \
+    if (!(condition)) {                                                    \
         std::cerr << "Assertion Failure (Warning): " << #condition << "\n" \
                   << fpr::print_location(                                  \
                          std::experimental::source_location::current())    \
