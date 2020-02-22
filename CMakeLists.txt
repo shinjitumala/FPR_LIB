@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(
     FPR_LIB
     VERSION 0.1
+    LANGUAGES CXX
     DESCRIPTION "FPR's C++ library for personal use."
 )
 
@@ -17,6 +18,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(
    -Wall
+   -fno-exceptions
+   -fno-rtti
 )
 
 add_library(FPR)
