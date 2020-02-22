@@ -8,14 +8,9 @@ project(
 )
 
 # Settings
-set(LLVM_BUILD_DIR /home/shinjitumala/E_DRIVE/TiTech/tools/build/llvm/11-init)
-set(LLVM_SRC_DIR /home/shinjitumala/E_DRIVE/TiTech/tools/llvm-project)
-
-set(CMAKE_C_COMPILER ${LLVM_BUILD_DIR}/bin/clang)
-set(CMAKE_CXX_COMPILER ${LLVM_BUILD_DIR}/bin/clang++)
-
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(
