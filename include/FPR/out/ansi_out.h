@@ -88,7 +88,7 @@ class ANSI_Out {
      * @return ANSI_Out& YES.
      */
     template <class O, class = std::enable_if_t<is_ostreamable<O>::value>>
-    ANSI_Out &operator<<(O o) noexcept {
+    ANSI_Out &operator<<(const O &o) noexcept {
         os << o;
         return *this;
     }
