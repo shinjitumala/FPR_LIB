@@ -18,26 +18,54 @@ constexpr auto warn = []() {
     return Logger(Logger::Level::WARN);
 };
 
-constexpr auto info = []() {
-    return Logger(Logger::Level::INFO);
+constexpr auto info = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG);
+    } else {
+        return Logger(Logger::Level::INFO);
+    }
 };
-constexpr auto red = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::RED);
+constexpr auto red = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::RED);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::RED);
+    }
 };
-constexpr auto grn = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::GREEN);
+constexpr auto grn = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::GREEN);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::GREEN);
+    }
 };
-constexpr auto yel = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::YELLOW);
+constexpr auto yel = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::YELLOW);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::YELLOW);
+    }
 };
-constexpr auto blu = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::BLUE);
+constexpr auto blu = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::BLUE);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::BLUE);
+    }
 };
-constexpr auto mag = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::MAGENTA);
+constexpr auto mag = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::MAGENTA);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::MAGENTA);
+    }
 };
-constexpr auto cyn = []() {
-    return Logger(Logger::Level::INFO, ANSI_Out::State::Color::CYAN);
+constexpr auto cyn = [](const bool msg = false) {
+    if (msg) {
+        return Logger(Logger::Level::MSG, ANSI_Out::State::Color::CYAN);
+    } else {
+        return Logger(Logger::Level::INFO, ANSI_Out::State::Color::CYAN);
+    }
 };
 
 constexpr auto print_location = [](const std::experimental::source_location &loc) -> std::string {
