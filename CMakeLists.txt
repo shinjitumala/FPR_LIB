@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Project info
-project(FPR_LIB VERSION 0.0)
+project(
+    FPR_LIB
+    VERSION 0.1
+    DESCRIPTION "FPR's C++ library for personal use."
+)
 
 # Settings
 set(LLVM_BUILD_DIR /home/shinjitumala/E_DRIVE/TiTech/tools/build/llvm/11-init)
