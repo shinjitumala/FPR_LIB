@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-# Project info
+# Information
 project(
     FPR_LIB
     VERSION 0.1
@@ -8,9 +8,11 @@ project(
 )
 
 # Settings
+## C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+## Used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(
