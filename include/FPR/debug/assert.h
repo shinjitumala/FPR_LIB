@@ -63,10 +63,10 @@ constexpr auto print_location = [](const std::experimental::source_location &loc
 inline void asrt(
     bool &&condition, std::function<void()> failure = []() {},
     const std::experimental::source_location &loc = std::experimental::source_location::current()) {
-#ifdef DEBUG
-    static const bool debug{true};
-#else
+#ifdef NDEBUG
     static const bool debug{false};
+#else
+    static const bool debug{true};
 #endif
 
     if constexpr (debug) {
@@ -92,11 +92,10 @@ inline void wasrt(
     bool &&condition, std::function<void()> warning = []() {},
     const std::experimental::source_location &loc =
         std::experimental::source_location::current()) {
-#ifdef DEBUG
-#undef DEBUG
-    static const bool debug{true};
-#else
+#ifdef NDEBUG
     static const bool debug{false};
+#else
+    static const bool debug{true};
 #endif
 
     if constexpr (debug) {
