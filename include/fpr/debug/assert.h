@@ -5,12 +5,12 @@
 #include <iostream>
 #include <string>
 
-#include <FPR/debug/log.h>
+#include <fpr/debug/log.h>
 
 namespace fpr {
 /**
  * @param loc Source code location
- * @return const std::string FPR's string representation of the location
+ * @return const std::string fpr's string representation of the location
  */
 constexpr auto print_location = [](const std::experimental::source_location loc) -> const std::string {
     std::string s;
@@ -27,7 +27,7 @@ constexpr auto print_location = [](const std::experimental::source_location loc)
 };
 
 /**
- * FPR's convenient assert
+ * fpr's convenient assert
  * @param condition Program will crash if this is not true.
  * @param action Code to be executed before crashing
  */

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FPR/out/color.h>
+#include <fpr/out/color.h>
 #include <type_traits>
 #include <vector>
 

@@ -1,4 +1,4 @@
-#include <FPR/out/ansicc.h>
+#include <fpr/out/ansicc.h>
 
 fpr::ansicc::ansicc()
     : bg{Color::NONE},

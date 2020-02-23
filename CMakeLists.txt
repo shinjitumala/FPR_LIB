@@ -38,4 +38,4 @@ target_compile_options(fprlog
 )
 
 # Packaging
-export(TARGETS fprlog FILE ${CMAKE_CURRENT_BINARY_DIR}/fprlogConfig.cmake)
+export(TARGETS fprlog FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)

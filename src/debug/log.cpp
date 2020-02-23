@@ -1,5 +1,5 @@
-#include <FPR/debug/assert.h>
-#include <FPR/debug/log.h>
+#include <fpr/debug/assert.h>
+#include <fpr/debug/log.h>
 
 namespace fpr {
 enum class log::type : u_char {

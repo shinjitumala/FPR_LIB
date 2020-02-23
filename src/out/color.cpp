@@ -1,4 +1,4 @@
-#include <FPR/out/color.h>
+#include <fpr/out/color.h>
 
 namespace fpr {
 aout::aout(ansicc cc, std::ostream &out) : os{out} {
