@@ -1,4 +1,4 @@
-target_sources(FPR
+target_sources(fprlog
     PUBLIC ansicc.cpp
     PUBLIC color.cpp
 )

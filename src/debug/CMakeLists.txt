@@ -1,3 +1,3 @@
-target_sources(FPR
+target_sources(fprlog
     PUBLIC log.cpp
 )
