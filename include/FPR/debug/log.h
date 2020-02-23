@@ -66,62 +66,76 @@ class log : private aout {
 };
 
 #ifndef NDEBUG
-#define err()                             \
+#define err(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::ERR,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::RED,      \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define wrn()                             \
+        std::cerr)                        \
+        << msg
+#define wrn(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::WRN,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::YELLOW,   \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define out()                             \
+        std::cerr)                        \
+        << msg
+#define out(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define grn()                             \
+        std::cerr)                        \
+        << msg
+#define grn(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::GREEN,    \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define blu()                             \
+        std::cerr)                        \
+        << msg
+#define blu(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::BLUE,     \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define mag()                             \
+        std::cerr)                        \
+        << msg
+#define mag(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::MAGENTA,  \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
-#define cyn()                             \
+        std::cerr)                        \
+        << msg
+#define cyn(msg)                          \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::CYAN,     \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)
+        std::cerr                         \
+            << msg)
 #else
+#define err(msg)
+#define wrn(msg)
+#define out(msg)
+#define grn(msg)
+#define blu(msg)
+#define mag(msg)
+#define cyn(msg)
 #endif
 }; // namespace fpr
