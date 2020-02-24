@@ -46,4 +46,8 @@ void log::di() {
     asrt(indent > 0U, std::cout << "Negative Indent!");
     indent--;
 }
+
+u_char log::get_indent() {
+    return indent;
+}
 } // namespace fpr
