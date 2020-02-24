@@ -32,18 +32,18 @@ constexpr auto print_location = [](const std::experimental::source_location loc)
  * @param action Code to be executed before crashing
  */
 #ifndef NDEBUG
-#define asrt(condition, action)                                   \
-    if (!(condition)) {                                           \
-        err("Assertion Failure: "                                 \
-            << #condition << "\n"                                 \
-            << fpr::print_location(                               \
-                   std::experimental::source_location::current()) \
-            << std::endl);                                        \
-        if constexpr (static_cast<bool>(sizeof(#action) - 1)) {   \
-            action;                                               \
-            err(std::endl);                                       \
-        }                                                         \
-        ::abort();                                                \
+#define asrt(condition, action)                                 \
+    if (!(condition)) {                                         \
+        err("Assertion Failure: "                               \
+            << #condition << "\n");                             \
+        err(fpr::print_location(                                \
+                std::experimental::source_location::current())  \
+            << std::endl);                                      \
+        if constexpr (static_cast<bool>(sizeof(#action) - 1)) { \
+            action;                                             \
+            err(std::endl);                                     \
+        }                                                       \
+        ::abort();                                              \
     }
 #else
 #define asrt(condition, action)
@@ -56,18 +56,19 @@ constexpr auto print_location = [](const std::experimental::source_location loc)
  * @param loc Source location to be displayed if 'condition' is false.
  */
 #ifndef NDEBUG
-#define wsrt(condition, action)                                   \
-    if (!(condition)) {                                           \
-        wrn("Assertion Failure (Warning): "                       \
-            << #condition << "\n"                                 \
-            << fpr::print_location(                               \
-                   std::experimental::source_location::current()) \
-            << std::endl);                                        \
-        if constexpr (static_cast<bool>(sizeof(#action) - 1)) {   \
-            wrn(<< "{\n");                                        \
-            action;                                               \
-            wrn(<< "\n}" << std::endl);                           \
-        }                                                         \
+#define wsrt(condition, action)                                 \
+    if (!(condition)) {                                         \
+        wrn("Assertion Failure (Warning): "                     \
+            << #condition << "\n");                             \
+        wrn(fpr::print_location(                                \
+                std::experimental::source_location::current())  \
+            << std::endl);                                      \
+        if constexpr (static_cast<bool>(sizeof(#action) - 1)) { \
+            fpr::log::ii();                                     \
+            action;                                             \
+            fpr::log::di();                                     \
+            wrn(std::endl);                                     \
+        }                                                       \
     }
 #else
 #define wsrt(condition, action)
