@@ -27,6 +27,12 @@ class log : private aout {
     bool print;
 
   public:
+    /**
+     * @param l Log level
+     * @param cc ANSI Color code
+     * @param out Output stream
+     * @param t Output type
+     */
     log(
         lvl l,
         ansicc cc,
@@ -63,6 +69,7 @@ class log : private aout {
      * Decrease Indent
      */
     static void di();
+    static u_char get_indent();
 };
 
 #ifndef NDEBUG
