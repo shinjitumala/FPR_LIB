@@ -1,3 +1,3 @@
 target_sources(fprlog
-    PUBLIC log.cpp
+    PRIVATE log.cpp
 )
