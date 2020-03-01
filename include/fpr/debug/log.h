@@ -45,8 +45,8 @@ class log : private aout {
      * @param o 
      * @return aout& 
      */
-    template <class O, class = std::enable_if_t<ostreamable<O>::v>>
-    log &operator<<(O o) {
+    template <class O, ostreamable_v<O> = true>
+    log &operator<<(const O &o) {
         if (print) {
             os << o;
         }
@@ -136,6 +136,13 @@ class log : private aout {
             fpr::ansicc::Emphasis::NONE}, \
         std::cerr                         \
             << msg)
+#define errn(msg) err(msg << "\n")
+#define wrnn(msg) wrn(msg << "\n")
+#define outn(msg) out(msg << "\n")
+#define grnn(msg) grn(msg << "\n")
+#define blun(msg) blu(msg << "\n")
+#define magn(msg) mag(msg << "\n")
+#define cynn(msg) cyn(msg << "\n")
 #else
 #define err(msg)
 #define wrn(msg)
@@ -144,5 +151,12 @@ class log : private aout {
 #define blu(msg)
 #define mag(msg)
 #define cyn(msg)
+#define errn(msg)
+#define wrnn(msg)
+#define outn(msg)
+#define grnn(msg)
+#define blun(msg)
+#define magn(msg)
+#define cynn(msg)
 #endif
 }; // namespace fpr
