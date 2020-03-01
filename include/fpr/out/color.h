@@ -23,14 +23,16 @@ template <class T>
 class ostreamable {
     template <class U>
     static auto test(int) -> decltype(
-        std::declval<std::ostream &>() << std::declval<U>(),
+        std::declval<std::ostream &>() << std::declval<const U &>(),
         std::true_type());
     template <class>
     static auto test(...) -> std::false_type;
 
   public:
-    static constexpr bool v{std::is_same_v<decltype(test<T>(0)), std::true_type>};
+    static constexpr bool value{std::is_same_v<decltype(test<T>(0)), std::true_type>};
 };
+template <class T>
+using ostreamable_v = std::enable_if_t<ostreamable<T>::value, bool>;
 
 /** ansicc out: Conveniece class for outputting colored text */
 class aout {
@@ -53,8 +55,8 @@ class aout {
      * @param o 
      * @return aout& 
      */
-    template <class O, class = std::enable_if_t<ostreamable<O>::v>>
-    aout &operator<<(O o) {
+    template <class O, ostreamable_v<O> = true>
+    aout &operator<<(const O &o) {
         os << o;
         return *this;
     }
