@@ -8,8 +8,8 @@ namespace fpr {
 /** Base class for logging */
 class log : private aout {
   public:
-    enum class type : u_char;
-    static constexpr u_char lvl_max{32};
+    enum class type : uint;
+    static constexpr uint type_max{std::numeric_limits<uint>::max() - 1U};
     enum class lvl : u_char {
         MSG,
         ERR,
@@ -17,8 +17,9 @@ class log : private aout {
         INF,
     };
 
-  private:
     static std::vector<bool> t;
+
+  private:
     static lvl l;
 
     static u_char indent;
@@ -37,7 +38,7 @@ class log : private aout {
         lvl l,
         ansicc cc,
         std::ostream &out = std::cout,
-        type t = static_cast<type>(lvl_max - 1));
+        type t = static_cast<type>(type_max));
     log(const log &) = delete;
     /**
      * @tparam O 
@@ -70,72 +71,83 @@ class log : private aout {
      */
     static void di();
     static u_char get_indent();
+
+    static bool printed(type t);
 };
 
+#define FPR_LOG_TYPE_DEFAULT fpr::log::type_max
+#define FPR_LOG_TYPE FPR_LOG_TYPE_DEFAULT
 #ifndef NDEBUG
-#define err(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::ERR,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::RED,      \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define err(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::ERR,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::RED,               \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define wrn(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::WRN,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::YELLOW,   \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define wrn(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::WRN,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::YELLOW,            \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define out(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::INF,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define out(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::INF,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define grn(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::INF,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::GREEN,    \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define grn(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::INF,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::GREEN,             \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define blu(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::INF,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::BLUE,     \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define blu(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::INF,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::BLUE,              \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define mag(msg)                          \
-    fpr::log(                             \
-        fpr::log::lvl::INF,               \
-        fpr::ansicc{                      \
-            fpr::ansicc::Color::NONE,     \
-            fpr::ansicc::Color::MAGENTA,  \
-            fpr::ansicc::Emphasis::NONE}, \
-        std::cerr)                        \
+#define mag(msg)                                   \
+    fpr::log(                                      \
+        fpr::log::lvl::INF,                        \
+        fpr::ansicc{                               \
+            fpr::ansicc::Color::NONE,              \
+            fpr::ansicc::Color::MAGENTA,           \
+            fpr::ansicc::Emphasis::NONE},          \
+        std::cerr,                                 \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE)) \
         << msg
-#define cyn(msg)                          \
+#define cyn(msg)                                   \
     fpr::log(                             \
         fpr::log::lvl::INF,               \
         fpr::ansicc{                      \
             fpr::ansicc::Color::NONE,     \
             fpr::ansicc::Color::CYAN,     \
             fpr::ansicc::Emphasis::NONE}, \
-        std::cerr                         \
-            << msg)
+        std::cerr,                         \
+        static_cast<fpr::log::type>(FPR_LOG_TYPE))\
+        << msg)
 #define errn(msg) err(msg << "\n")
 #define wrnn(msg) wrn(msg << "\n")
 #define outn(msg) out(msg << "\n")

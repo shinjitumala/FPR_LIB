@@ -2,13 +2,14 @@
 #include <fpr/debug/log.h>
 
 namespace fpr {
-enum class log::type : u_char {
-    LAST = lvl_max,
+enum class log::type : uint {
+    LAST = type_max,
 };
 std::vector<bool> log::t{
     []() {
         std::vector<bool> vec;
-        vec.resize(static_cast<size_t>(type::LAST), true);
+        vec.resize(static_cast<size_t>(type::LAST) + 1, false);
+        vec.at(static_cast<size_t>(type::LAST)) = true;
         return vec;
     }()};
 
@@ -19,15 +20,15 @@ u_char log::i{std::numeric_limits<u_char>::max()};
 
 log::log(lvl lvl, ansicc cc, std::ostream &out, type type)
     : aout(cc, out) {
-    if (!t[static_cast<u_char>(type)]) {
+    if (lvl == lvl::ERR || lvl == lvl::WRN) {
+        print = true;
+    } else if (!t[static_cast<size_t>(type)]) {
         print = false;
         return;
-    }
-    if (static_cast<u_char>(lvl) > static_cast<u_char>(l)) {
+    } else if (static_cast<u_char>(lvl) > static_cast<u_char>(l)) {
         print = false;
         return;
-    }
-    if (indent > i) {
+    } else if (indent > i) {
         print = false;
         return;
     }
@@ -49,5 +50,9 @@ void log::di() {
 
 u_char log::get_indent() {
     return indent;
+}
+
+bool log::printed(type type) {
+    return t[static_cast<size_t>(type)];
 }
 } // namespace fpr
