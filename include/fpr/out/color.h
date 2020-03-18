@@ -23,7 +23,7 @@ template <class T>
 class ostreamable {
     template <class U>
     static auto test(int) -> decltype(
-        std::declval<std::ostream &>() << std::declval<const U &>(),
+        std::declval<std::ostream &>() << std::declval<const U>(),
         std::true_type());
     template <class>
     static auto test(...) -> std::false_type;
