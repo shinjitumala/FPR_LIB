@@ -14,6 +14,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
 
 ## Used by clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -35,6 +37,7 @@ target_compile_options(fprlog
         -Wall
         -fno-exceptions
         -fno-rtti
+        -g3
 )
 
 # Packaging
