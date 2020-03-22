@@ -72,11 +72,11 @@ struct Colorizer {
 };
 
 // Some preset colors
-using Red = Colorizer<Color::RED, Color::NONE, Emphasis::BOLD>;
-using Green = Colorizer<Color::GREEN, Color::NONE, Emphasis::BOLD>;
-using Yellow = Colorizer<Color::YELLOW, Color::NONE, Emphasis::BOLD>;
-using Blue = Colorizer<Color::BLUE, Color::NONE, Emphasis::BOLD>;
-using Magenta = Colorizer<Color::MAGENTA, Color::NONE, Emphasis::BOLD>;
-using Cyan = Colorizer<Color::CYAN, Color::NONE, Emphasis::BOLD>;
+using Red = Colorizer<Color::RED, Color::NONE, Emphasis::NONE>;
+using Green = Colorizer<Color::GREEN, Color::NONE, Emphasis::NONE>;
+using Yellow = Colorizer<Color::YELLOW, Color::NONE, Emphasis::NONE>;
+using Blue = Colorizer<Color::BLUE, Color::NONE, Emphasis::NONE>;
+using Magenta = Colorizer<Color::MAGENTA, Color::NONE, Emphasis::NONE>;
+using Cyan = Colorizer<Color::CYAN, Color::NONE, Emphasis::NONE>;
 } // namespace ansicc
 } // namespace fpr
