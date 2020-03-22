@@ -25,6 +25,13 @@ void my_assert(
         experimental::source_location::current());
 
 /**
+ * Print location info to 'os'
+ * @param loc 
+ * @param os 
+ */
+void print_location(const experimental::source_location &loc, ostream &os);
+
+/**
  * action() is called if condition is false.
  * @param condition 
  * @action Actions to take such as printing messages before executing crash()

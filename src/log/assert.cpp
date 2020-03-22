@@ -16,7 +16,7 @@ namespace fpr {
 using namespace std;
 using namespace std::filesystem;
 
-constexpr auto print_location = [](const experimental::source_location &loc, ostream &os) {
+void print_location(const experimental::source_location &loc, ostream &os) {
     os << "Location: " << loc.file_name() << ":" << std::to_string(loc.line()) << ":" << std::to_string(loc.column()) << " " << loc.function_name() << "()";
 };
 
