@@ -29,10 +29,10 @@ struct DefaultLogger {
  */
 template <class Combined, class... Loggers>
 struct Logger {
-    static bool should_print() { return Combined::should_print(); }
-    static ostream &get_os() { return Combined::get_os(); };
-    static void prefix(ostream &os) { Combined::prefix(os); }
-    static void postfix(ostream &os) { Combined::postfix(os); }
+    inline static bool should_print() { return Combined::should_print(); }
+    inline static ostream &get_os() { return Combined::get_os(); };
+    inline static void prefix(ostream &os) { Combined::prefix(os); }
+    inline static void postfix(ostream &os) { Combined::postfix(os); }
 };
 
 /**
@@ -47,13 +47,15 @@ struct Logger {
  */
 template <class Combined, class ToBeCombined, class... Tail>
 struct Logger<Combined, ToBeCombined, Tail...> {
-    static bool should_print() { return Combined::should_print() && Logger<ToBeCombined, Tail...>::should_print(); }
-    static ostream &get_os() { return Combined::get_os(); };
-    static void prefix(ostream &os) {
+    inline static bool should_print() {
+        return Combined::should_print() && Logger<ToBeCombined, Tail...>::should_print();
+    }
+    inline static ostream &get_os() { return Combined::get_os(); };
+    inline static void prefix(ostream &os) {
         Combined::prefix(os);
         Logger<ToBeCombined, Tail...>::prefix(os);
     }
-    static void postfix(ostream &os) {
+    inline static void postfix(ostream &os) {
         Combined::postfix(os);
         Logger<ToBeCombined, Tail...>::postfix(os);
     }
