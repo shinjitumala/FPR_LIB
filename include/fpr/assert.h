@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdlib>
 #include <experimental/source_location>
 #include <iostream>
 #include <string>
