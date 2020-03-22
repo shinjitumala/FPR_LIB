@@ -61,15 +61,22 @@ struct Logger<Combined, ToBeCombined, Tail...> {
     }
 };
 
-void increase_indent();
-void decrease_indent();
-
 /** The indent tracker */
 struct Indent {
     static bool should_print();
     static ostream &get_os();
     static void prefix(ostream &os);
     static void postfix(ostream &os);
+
+    /** Current indent */
+    static uint indent;
+    /** Increases indent */
+    static void inc();
+    /** Decreases indent */
+    static void dec();
+
+  private:
+    static const string &indent_str();
 };
 
 /**

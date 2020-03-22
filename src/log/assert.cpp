@@ -29,13 +29,14 @@ void my_assert(
     if (cond) {
         return;
     }
-    log::increase_indent();
     log::log<log::Logger<ansicc::Red, log::Indent>>([&](ostream &unused) {
         cerr << "Assertion Failure: " << cond_str << ", ";
         print_location(location, cerr);
         cerr << endl;
     });
+    log::Indent::inc();
     action();
+    log::Indent::dec();
     cerr << endl;
 
     crash();
