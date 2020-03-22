@@ -9,18 +9,32 @@
 
 namespace fpr {
 /**
- * action() is executed if cond is false.
- * After printing location, and cond_str, action() is executed.
- * Then finally, crash() will be executed.
+ * If cond is false, location is printed then action() is executed.
+ * After which, cerr is flushed and ::abort() is called.
  * @param cond 
  * @param cond_str 
  * @param action 
- * @param crash 
  * @param location 
  */
 void my_assert(
-    bool cond, const string cond_str, function<void()> action = []() {},
-    function<void()> crash = []() {},
+    bool cond,
+    const string cond_str,
+    function<void()> action = []() {},
+    experimental::source_location location =
+        experimental::source_location::current());
+
+/**
+ * If cond is false, location is printed then action() is executed.
+ * After which, cerr is flushed.
+ * @param cond 
+ * @param cond_str 
+ * @param action 
+ * @param location 
+ */
+void my_warn(
+    bool cond,
+    const string cond_str,
+    function<void()> action = []() {},
     experimental::source_location location =
         experimental::source_location::current());
 
@@ -37,8 +51,7 @@ void print_location(const experimental::source_location &loc, ostream &os);
  * @action Actions to take such as printing messages before executing crash()
  */
 #ifndef NDEBUG
-#define asrt(condition, action) fpr::my_assert( \
-    condition, #condition, [&]() { action; }, []() { ::abort(); })
+#define asrt(condition, action) fpr::my_assert(condition, #condition)
 #else
 #define asrt(condition, action)
 #endif
@@ -49,7 +62,7 @@ void print_location(const experimental::source_location &loc, ostream &os);
  * @action Actions to take such as printing messages before executing crash()
  */
 #ifndef NDEBUG
-#define wsrt(condition, action) fpr::my_assert(condition, #condition, [&]() { action; })
+#define wsrt(condition, action) fpr::my_warn(condition, #condition)
 #else
 #define wsrt(condition, action)
 #endif
