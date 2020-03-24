@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <iostream>
 #include <ostream>
 
 namespace fpr {
@@ -61,24 +62,35 @@ struct Logger<Combined, ToBeCombined, Tail...> {
     }
 };
 
+const string one_indent{"    "};
 /** The indent tracker */
-template<int I = 0>
-struct Indent {
-    static bool should_print();
-    static ostream &get_os();
-    static void prefix(ostream &os);
-    static void postfix(ostream &os);
+template<uint I = 0>
+struct IndentBase {
+    static bool should_print(){return true;};
+    static ostream &get_os(){return std::cout;};
+    static void prefix(ostream &os){
+        os << indent;
+    };
+    static void postfix(ostream &os){};
 
     /** Current indent */
-    static uint indent;
+    static string indent;
     /** Increases indent */
-    static void inc();
+    static void inc(){
+        indent += one_indent;
+    };
     /** Decreases indent */
-    static void dec();
+    static void dec(){
+        indent.erase(indent.end() - one_indent.length(), indent.end());
+    };
 
   private:
     static const string &indent_str();
 };
+template<uint I>
+string IndentBase<I>::indent{""};
+
+using Indent = IndentBase<>;
 
 /**
  * @tparam DefaultLogger Logger to be used.
