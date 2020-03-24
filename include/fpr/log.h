@@ -62,6 +62,7 @@ struct Logger<Combined, ToBeCombined, Tail...> {
 };
 
 /** The indent tracker */
+template<int I = 0>
 struct Indent {
     static bool should_print();
     static ostream &get_os();
