@@ -9,7 +9,8 @@ using namespace std;
 /** Used to print ANSI escape code to decorate terminal output. */
 namespace ansicc {
 /** Foreground Color code. Add 10 to convert to backgroudn color code. */
-enum class Color {
+enum class Color
+{
     BLACK = 30,
     RED = 31,
     GREEN = 32,
@@ -22,7 +23,8 @@ enum class Color {
 };
 
 /** Emphasis (Bold, Underline, etc...) */
-enum class Emphasis {
+enum class Emphasis
+{
     RESET = 0,
     BOLD = 1,
     FAINT = 2,
@@ -40,13 +42,15 @@ enum class Emphasis {
     NONE,
 };
 
-template <Color fg, Color bg, Emphasis e>
-struct Colorizer {
+template<Color fg, Color bg, Emphasis e>
+struct Colorizer
+{
     static bool should_print() { return true; }
-    static ostream &get_os() { return cout; }
-    static void prefix(ostream &os) {
+    static ostream& get_os() { return cout; }
+    static void prefix(ostream& os)
+    {
         os << "\x1b["; // Escape Character
-        bool flag{false};
+        bool flag{ false };
         if (fg != fpr::ansicc::Color::NONE) {
             os << static_cast<uint>(fg);
             flag = true;
@@ -66,7 +70,8 @@ struct Colorizer {
         }
         os << "m"; // End
     }
-    static void postfix(ostream &os) {
+    static void postfix(ostream& os)
+    {
         os << "\x1b[0m"; // Reset
     }
 };

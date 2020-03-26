@@ -11,43 +11,46 @@ namespace fpr {
 /**
  * If cond is false, location is printed then action() is executed.
  * After which, cerr is flushed and ::abort() is called.
- * @param cond 
- * @param cond_str 
- * @param action 
- * @param location 
+ * @param cond
+ * @param cond_str
+ * @param action
+ * @param location
  */
-void my_assert(
-    bool cond,
-    const string cond_str,
-    function<void()> action = []() {},
-    experimental::source_location location =
-        experimental::source_location::current());
+void
+my_assert(
+  bool cond,
+  const string cond_str,
+  function<void()> action = []() {},
+  experimental::source_location location =
+    experimental::source_location::current());
 
 /**
  * If cond is false, location is printed then action() is executed.
  * After which, cerr is flushed.
- * @param cond 
- * @param cond_str 
- * @param action 
- * @param location 
+ * @param cond
+ * @param cond_str
+ * @param action
+ * @param location
  */
-void my_warn(
-    bool cond,
-    const string cond_str,
-    function<void()> action = []() {},
-    experimental::source_location location =
-        experimental::source_location::current());
+void
+my_warn(
+  bool cond,
+  const string cond_str,
+  function<void()> action = []() {},
+  experimental::source_location location =
+    experimental::source_location::current());
 
 /**
  * Print location info to 'os'
- * @param loc 
- * @param os 
+ * @param loc
+ * @param os
  */
-void print_location(const experimental::source_location &loc, ostream &os);
+void
+print_location(const experimental::source_location& loc, ostream& os);
 
 /**
  * action() is called if condition is false.
- * @param condition 
+ * @param condition
  * @action Actions to take such as printing messages before executing crash()
  */
 #ifndef NDEBUG
@@ -58,7 +61,7 @@ void print_location(const experimental::source_location &loc, ostream &os);
 
 /**
  * action() is called if condition is false.
- * @param condition 
+ * @param condition
  * @action Actions to take such as printing messages before executing crash()
  */
 #ifndef NDEBUG

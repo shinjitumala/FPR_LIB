@@ -16,37 +16,48 @@ namespace fpr {
 using namespace std;
 using namespace std::filesystem;
 
-void print_location(const experimental::source_location &loc, ostream &os) {
-    os << "Location: " << loc.file_name() << ":" << std::to_string(loc.line()) << ":" << std::to_string(loc.column()) << " " << loc.function_name() << "()";
+void
+print_location(const experimental::source_location& loc, ostream& os)
+{
+    os << "Location: " << loc.file_name() << ":" << std::to_string(loc.line())
+       << ":" << std::to_string(loc.column()) << " " << loc.function_name()
+       << "()";
 };
 
-struct ToCerr {
+struct ToCerr
+{
     static bool should_print() { return true; };
-    static ostream &get_os() { return cerr; };
-    static void prefix(ostream &os){};
-    static void postfix(ostream &os){};
+    static ostream& get_os() { return cerr; };
+    static void prefix(ostream& os){};
+    static void postfix(ostream& os){};
 };
 
-void do_if(
-    bool cond,
-    function<void()> action = []() {}) {
+void
+do_if(
+  bool cond,
+  function<void()> action = []() {})
+{
     if (cond) {
         return;
     }
     action();
 }
 
-void my_assert(
-    bool cond,
-    const string cond_str,
-    function<void()> action = []() {},
-    experimental::source_location location = experimental::source_location::current()) {
+void
+my_assert(
+  bool cond,
+  const string cond_str,
+  function<void()> action = []() {},
+  experimental::source_location location =
+    experimental::source_location::current())
+{
     do_if(cond, [&]() {
-        log::log<log::Logger<ToCerr, ansicc::Red, log::Indent>>([&](ostream &os) {
-            os << "Assertion Failure: " << cond_str << ", ";
-            print_location(location, os);
-            os << endl;
-        });
+        log::log<log::Logger<ToCerr, ansicc::Red, log::Indent>>(
+          [&](ostream& os) {
+              os << "Assertion Failure: " << cond_str << ", ";
+              print_location(location, os);
+              os << endl;
+          });
         log::Indent::inc();
         action();
         log::Indent::dec();
@@ -55,17 +66,21 @@ void my_assert(
     });
 }
 
-void my_warn(
-    bool cond,
-    const string cond_str,
-    function<void()> action = []() {},
-    experimental::source_location location = experimental::source_location::current()) {
+void
+my_warn(
+  bool cond,
+  const string cond_str,
+  function<void()> action = []() {},
+  experimental::source_location location =
+    experimental::source_location::current())
+{
     do_if(cond, [&]() {
-        log::log<log::Logger<ToCerr, ansicc::Yellow, log::Indent>>([&](ostream &os) {
-            os << "Warning: " << cond_str << ", ";
-            print_location(location, os);
-            os << endl;
-        });
+        log::log<log::Logger<ToCerr, ansicc::Yellow, log::Indent>>(
+          [&](ostream& os) {
+              os << "Warning: " << cond_str << ", ";
+              print_location(location, os);
+              os << endl;
+          });
         log::Indent::inc();
         action();
         log::Indent::dec();
