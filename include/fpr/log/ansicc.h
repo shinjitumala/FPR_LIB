@@ -47,12 +47,8 @@ enum class Effect
 /// @tparam bg Background color.
 /// @tparam e Effect type.
 template<Color fg, Color bg, Effect e>
-class Colorizer
+struct Colorizer
 {
-    /// Used to instantiate the function at compile time.
-    bool flag{ false };
-
-  public:
     /// Print the ansi color code to change terminal output.
     /// @param os
     /// @return ostream&
@@ -61,17 +57,16 @@ class Colorizer
         os << "\x1b["; // Escape Character
         if constexpr (fg != fpr::ansicc::Color::NONE) {
             os << static_cast<uint>(fg);
-            flag = true;
         }
         if constexpr (bg != fpr::ansicc::Color::NONE) {
-            if constexpr (flag) {
+            if constexpr (fg != fpr::ansicc::Color::NONE) {
                 os << ";";
             }
             os << static_cast<uint>(bg) + 10;
-            flag = true;
         }
         if constexpr (e != fpr::ansicc::Effect::NONE) {
-            if constexpr (flag) {
+            if constexpr (fg != fpr::ansicc::Color::NONE ||
+                          fg != fpr::ansicc::Color::NONE) {
                 os << ";";
             }
             os << static_cast<uint>(e);
