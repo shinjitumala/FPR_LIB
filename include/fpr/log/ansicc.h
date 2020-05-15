@@ -6,9 +6,9 @@
 namespace fpr {
 using namespace std;
 
-/** Used to print ANSI escape code to decorate terminal output. */
+/// Used to print ANSI escape code to decorate terminal output.
 namespace ansicc {
-/** Foreground Color code. Add 10 to convert to backgroudn color code. */
+/// Foreground Color code. Add 10 to convert to backgroudn color code.
 enum class Color
 {
     BLACK = 30,
@@ -22,7 +22,7 @@ enum class Color
     NONE,
 };
 
-/** Emphasis (Bold, Underline, etc...) */
+/// Emphasis (Bold, Underline, etc...)
 enum class Emphasis
 {
     RESET = 0,
@@ -83,5 +83,5 @@ using Yellow = Colorizer<Color::YELLOW, Color::NONE, Emphasis::NONE>;
 using Blue = Colorizer<Color::BLUE, Color::NONE, Emphasis::NONE>;
 using Magenta = Colorizer<Color::MAGENTA, Color::NONE, Emphasis::NONE>;
 using Cyan = Colorizer<Color::CYAN, Color::NONE, Emphasis::NONE>;
-} // namespace ansicc
-} // namespace fpr
+}
+}
