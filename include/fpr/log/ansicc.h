@@ -22,8 +22,8 @@ enum class Color
     NONE,
 };
 
-/// Emphasis (Bold, Underline, etc...)
-enum class Emphasis
+/// Effect (Bold, Underline, etc...)
+enum class Effect
 {
     RESET = 0,
     BOLD = 1,
@@ -42,46 +42,69 @@ enum class Emphasis
     NONE,
 };
 
-template<Color fg, Color bg, Emphasis e>
-struct Colorizer
+/// Use this to change the color and effects of the terminal output.
+/// @tparam fg Foreground color.
+/// @tparam bg Background color.
+/// @tparam e Effect type.
+template<Color fg, Color bg, Effect e>
+class Colorizer
 {
-    static bool should_print() { return true; }
-    static ostream& get_os() { return cout; }
-    static void prefix(ostream& os)
+    /// Used to instantiate the function at compile time.
+    bool flag{ false };
+
+  public:
+    /// Print the ansi color code to change terminal output.
+    /// @param os
+    /// @return ostream&
+    inline ostream& print(ostream& os)
     {
         os << "\x1b["; // Escape Character
-        bool flag{ false };
-        if (fg != fpr::ansicc::Color::NONE) {
+        if constexpr (fg != fpr::ansicc::Color::NONE) {
             os << static_cast<uint>(fg);
             flag = true;
         }
-        if (bg != fpr::ansicc::Color::NONE) {
-            if (flag) {
+        if constexpr (bg != fpr::ansicc::Color::NONE) {
+            if constexpr (flag) {
                 os << ";";
             }
             os << static_cast<uint>(bg) + 10;
             flag = true;
         }
-        if (e != fpr::ansicc::Emphasis::NONE) {
-            if (flag) {
+        if constexpr (e != fpr::ansicc::Effect::NONE) {
+            if constexpr (flag) {
                 os << ";";
             }
             os << static_cast<uint>(e);
         }
         os << "m"; // End
-    }
-    static void postfix(ostream& os)
-    {
-        os << "\x1b[0m"; // Reset
+        return os;
     }
 };
 
-// Some preset colors
-using Red = Colorizer<Color::RED, Color::NONE, Emphasis::NONE>;
-using Green = Colorizer<Color::GREEN, Color::NONE, Emphasis::NONE>;
-using Yellow = Colorizer<Color::YELLOW, Color::NONE, Emphasis::NONE>;
-using Blue = Colorizer<Color::BLUE, Color::NONE, Emphasis::NONE>;
-using Magenta = Colorizer<Color::MAGENTA, Color::NONE, Emphasis::NONE>;
-using Cyan = Colorizer<Color::CYAN, Color::NONE, Emphasis::NONE>;
+/// Use this to reset the previously set ansi code state.
+struct Reset
+{
+    /// Prints the code to reset ansi code state.
+    /// @param os
+    /// @return ostream&
+    static inline ostream& print(ostream& os)
+    {
+        os << "\x1b[0m"; // Reset
+        return os;
+    }
+};
+
+/// Preset Red
+auto Red{ Colorizer<Color::RED, Color::NONE, Effect::NONE>{} };
+/// Preset Green
+auto Green{ Colorizer<Color::GREEN, Color::NONE, Effect::NONE>{} };
+/// Preset Yellow
+auto Yellow{ Colorizer<Color::YELLOW, Color::NONE, Effect::NONE>{} };
+/// Preset Blue
+auto Blue{ Colorizer<Color::BLUE, Color::NONE, Effect::NONE>{} };
+/// Preset Magenta
+auto Magenta{ Colorizer<Color::MAGENTA, Color::NONE, Effect::NONE>{} };
+/// Preset Cyan
+auto Cyan{ Colorizer<Color::CYAN, Color::NONE, Effect::NONE>{} };
 }
 }
