@@ -84,19 +84,18 @@ class CombinedCallback
     int call(streambuf& buf)
     {
         int ret;
-        /// What have I done...?
-        auto status{ apply(
-          [&](auto&&... cb) -> int {
+        // What have I done...?
+        return apply(
+          [&](auto&&... cb) {
+              // This is done to silence the warning. Will probably be
+              // optimized.
               return (((void(ret = cb.call(buf)), true) &&
                        ret == streambuf::traits_type::eof()) ||
-                      ...);
+                      ...)
+                       ? ret
+                       : ret;
           },
-          callbacks) };
-
-        if (status) {
-            return streambuf::traits_type::eof();
-        }
-        return ret;
+          callbacks);
     }
 };
 };
