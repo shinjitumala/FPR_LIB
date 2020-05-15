@@ -66,6 +66,7 @@ class BufNewLine : public streambuf
 template<class... Callbacks>
 class CombinedCallback
 {
+    /// Tuple of callback classes.
     tuple<Callbacks...> callbacks;
 
   public:
