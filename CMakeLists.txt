@@ -40,5 +40,19 @@ target_compile_options(fprlog
         -g3
 )
 
+# Test
+add_executable(test
+    src/test.cpp
+)
+target_include_directories(test PRIVATE include)
+target_compile_options(test
+    PRIVATE
+        -Wall
+        -fno-exceptions
+        -fno-rtti
+        -g3
+        -O3
+)
+
 # Packaging
 export(TARGETS fprlog FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)
