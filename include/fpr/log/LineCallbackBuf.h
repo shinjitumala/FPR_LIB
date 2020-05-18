@@ -11,7 +11,7 @@ namespace log {
 /// character.
 /// @tparam Callback
 template<class Callback>
-class BufNewLine : public streambuf
+class LineCallbackBuf : public streambuf
 {
     using Base = streambuf;
 
@@ -19,21 +19,17 @@ class BufNewLine : public streambuf
     /// The real buffer, we will send all the output here after checking them
     Base* const destination;
     /// The newline callback
-    Callback callback;
+    Callback& callback;
     /// Set to true when the next character is the first in a line.
     bool is_newline{ true };
 
   public:
     /// @param dest Final Destination of the output
-    BufNewLine(ostream& dest)
-      : destination{ dest.rdbuf() }
-    {}
-    /// @param dest Final Destination of the output
     /// @param callback Use this to pass dynamically allocated CallBack
     /// functions.
-    BufNewLine(ostream& dest, Callback&& callback)
-      : BufNewLine(dest)
-      , callback{ move(callback) }
+    LineCallbackBuf(ostream& dest, Callback& callback)
+      : destination{ dest.rdbuf() }
+      , callback{ callback }
     {}
 
     /// Since we did not define a character, this function will be called for
@@ -60,25 +56,23 @@ class BufNewLine : public streambuf
     }
 };
 
-/// Helper class for 'BufNewLine'.
+/// Helper class for 'LineCallbackBuf'.
 /// Combines multiple callback classes to one.
 /// @tparam Callbacks
 template<class... Callbacks>
 class CombinedCallback
 {
     /// Tuple of callback classes.
-    tuple<Callbacks...> callbacks;
+    tuple<Callbacks&...> callbacks;
 
   public:
-    /// Default constructs all callbacks.
-    CombinedCallback(){};
     /// Use this to initialize the callback classes with arguments.
     /// @param callbacks
-    CombinedCallback(Callbacks&&... callbacks)
+    CombinedCallback(Callbacks&... callbacks)
       : callbacks(callbacks...)
     {}
 
-    /// Called when BufNewLine
+    /// Called when LineCallbackBuf
     /// @param buf
     /// @return int
     int call(streambuf& buf)
@@ -89,11 +83,13 @@ class CombinedCallback
           [&](auto&&... cb) {
               // This is done to silence the warning. Will probably be
               // optimized.
-              return (((void(ret = cb.call(buf)), true) &&
-                       ret == streambuf::traits_type::eof()) ||
-                      ...)
-                       ? ret
-                       : ret;
+              if ((((void(ret = cb.call(buf)), true) &&
+                    ret == streambuf::traits_type::eof()) ||
+                   ...)) {
+                  cerr << "Output error." << endl;
+                  ::exit(1);
+              };
+              return ret;
           },
           callbacks);
     }
