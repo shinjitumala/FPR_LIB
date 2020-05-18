@@ -5,9 +5,9 @@
 
 namespace fpr {
 using namespace std;
-
+namespace log {
 /// Used to print ANSI escape code to decorate terminal output.
-namespace ansicc {
+namespace ansi {
 /// Foreground Color code. Add 10 to convert to backgroudn color code.
 enum class Color
 {
@@ -55,18 +55,17 @@ struct Colorizer
     inline ostream& print(ostream& os)
     {
         os << "\x1b["; // Escape Character
-        if constexpr (fg != fpr::ansicc::Color::NONE) {
+        if constexpr (fg != Color::NONE) {
             os << static_cast<uint>(fg);
         }
-        if constexpr (bg != fpr::ansicc::Color::NONE) {
-            if constexpr (fg != fpr::ansicc::Color::NONE) {
+        if constexpr (bg != Color::NONE) {
+            if constexpr (fg != Color::NONE) {
                 os << ";";
             }
             os << static_cast<uint>(bg) + 10;
         }
-        if constexpr (e != fpr::ansicc::Effect::NONE) {
-            if constexpr (fg != fpr::ansicc::Color::NONE ||
-                          fg != fpr::ansicc::Color::NONE) {
+        if constexpr (e != Effect::NONE) {
+            if constexpr (fg != Color::NONE || fg != Color::NONE) {
                 os << ";";
             }
             os << static_cast<uint>(e);
@@ -101,5 +100,6 @@ auto Blue{ Colorizer<Color::BLUE, Color::NONE, Effect::NONE>{} };
 auto Magenta{ Colorizer<Color::MAGENTA, Color::NONE, Effect::NONE>{} };
 /// Preset Cyan
 auto Cyan{ Colorizer<Color::CYAN, Color::NONE, Effect::NONE>{} };
-}
-}
+};
+};
+};
