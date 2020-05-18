@@ -1,82 +1,58 @@
 #include <chrono>
-#include <fpr/log.h>
-#include <fpr/log/BufNewLine.h>
+#include <experimental/source_location>
+#include <fpr/log/LineCallbackBuf.h>
+#include <fpr/log/Location.h>
 #include <fpr/log/ansicc.h>
-#include <fpr/util/repeat.h>
-#include <iostream>
-#include <ratio>
-#include <vector>
+#include <fpr/log/callback/Indent.h>
+#include <iomanip>
+#include <sstream>
 
-using namespace fpr;
 using namespace std;
+using namespace fpr;
+using namespace log;
+using namespace ansi;
 
-struct hoge
+struct time_callback
 {
     int call(streambuf& a)
     {
-        static const string indent{ "    " };
-        static const size_t indent_size{ indent.size() };
-        return a.sputn(indent.c_str(), indent_size);
+        auto time{ chrono::system_clock::to_time_t(
+          chrono::system_clock::now()) };
+        stringstream ss;
+        ss << put_time(localtime(&time), "%X");
+        string output{ ss.str() };
+        return a.sputn(output.c_str(), output.size());
     };
 };
-struct foo
-{
-    int call(streambuf& a)
-    {
-        static const string indent{ "penis" };
-        static const size_t indent_size{ indent.size() };
-        return a.sputn(indent.c_str(), indent_size);
-    };
-};
+
+#define asrt(cond, action)                                                     \
+    if (auto loc = experimental::source_location::current(); !cond) {          \
+        using namespace fpr::log;                                              \
+        cerr << loc;                                                           \
+        action;                                                                \
+        ::exit(1);                                                             \
+    }
 
 int
 main(void)
 {
-    ulong standard;
-    ulong news;
-    ulong olds;
-    {
-        auto start{ chrono::high_resolution_clock::now() };
-        repeat(10000, [&]() {
-            cout << "    apple\n    banana\n    cat\n";
-            cout << "    a\n    b\n    c\n";
-        });
-        auto end{ chrono::high_resolution_clock::now() };
-        auto diff{ chrono::duration_cast<chrono::nanoseconds>(end - start) };
-        standard = diff.count();
-    }
+    Indent ind{};
+    time_callback tc;
+    CombinedCallback cb{ ind, tc };
+    LineCallbackBuf a{ cerr, cb };
+    ostream hage{ &a };
 
-    {
-        auto start{ chrono::high_resolution_clock::now() };
-        log::BufNewLine<log::CombinedCallback<hoge>> a{ cout };
-        ostream hage{ &a };
-
-        repeat(10000, [&]() {
-            hage << "apple\nbanana\ncat\n";
-            hage << "a\nb\nc";
-        });
-        auto end{ chrono::high_resolution_clock::now() };
-        auto diff{ chrono::duration_cast<chrono::nanoseconds>(end - start) };
-        news = diff.count();
-    }
-
-    {
-        using fuck = log::Logger<log::Indent>;
-        log::Indent::inc();
-        auto start{ chrono::high_resolution_clock::now() };
-        repeat(10000, [&]() {
-            log::log<fuck>([](ostream& os) { os << "apple\n"; });
-            log::log<fuck>([](ostream& os) { os << "banana\n"; });
-            log::log<fuck>([](ostream& os) { os << "cat\n"; });
-            log::log<fuck>([](ostream& os) { os << "a\n"; });
-            log::log<fuck>([](ostream& os) { os << "b\n"; });
-            log::log<fuck>([](ostream& os) { os << "c\n"; });
-        });
-        auto end{ chrono::high_resolution_clock::now() };
-        auto diff{ chrono::duration_cast<chrono::nanoseconds>(end - start) };
-        olds = diff.count();
-    }
-    cout << standard << endl;
-    cerr << news << " x" << (float)news / standard << endl;
-    cerr << olds << " x" << (float)olds / standard << endl;
+    //     repeat(10000, [&]() {
+    hage << "apple\nbanana\ncat\n";
+    Magenta.print(hage);
+    ind.inc();
+    hage << "haha\n";
+    ind.dec();
+    auto blnk{ Colorizer<Color::BLUE, Color::NONE, Effect::UNDERLINE>{} };
+    ind.inc();
+    ind.inc();
+    blnk.print(hage);
+    hage << "IBLINK\n";
+    Reset::print(hage);
+    asrt(0, cout << "message before error." << endl;);
 }
