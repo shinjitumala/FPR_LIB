@@ -28,7 +28,7 @@ target_include_directories(libfpr INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(test
     src/test.cpp
 )
-target_include_directories(test PRIVATE include)
+target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(test
     PRIVATE
         -Wall
