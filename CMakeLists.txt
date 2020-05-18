@@ -21,24 +21,23 @@ set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # The Library
-add_library(fprlog STATIC)
-add_subdirectory(src)
-set_target_properties(fprlog PROPERTIES
-    VERSION 0.1
-)
-target_include_directories(fprlog
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
+# add_library(fprlog STATIC)
+# set_target_properties(fprlog PROPERTIES
+#     VERSION 0.1
+# )
+# target_include_directories(fprlog
+#     PUBLIC
+#         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#         $<INSTALL_INTERFACE:include>
+# )
 
-target_compile_options(fprlog
-    PRIVATE
-        -Wall
-        -fno-exceptions
-        -fno-rtti
-        -g3
-)
+# target_compile_options(fprlog
+#     PRIVATE
+#         -Wall
+#         -fno-exceptions
+#         -fno-rtti
+#         -g3
+# )
 
 # Test
 add_executable(test
@@ -55,4 +54,4 @@ target_compile_options(test
 )
 
 # Packaging
-export(TARGETS fprlog FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)
+# export(TARGETS fprlog FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)
