@@ -52,7 +52,7 @@ struct Colorizer
     /// Print the ansi color code to change terminal output.
     /// @param os
     /// @return ostream&
-    inline ostream& print(ostream& os)
+    inline ostream& print(ostream& os) const
     {
         os << "\x1b["; // Escape Character
         if constexpr (fg != Color::NONE) {
@@ -87,19 +87,6 @@ struct Reset
         return os;
     }
 };
-
-/// Preset Red
-auto Red{ Colorizer<Color::RED, Color::NONE, Effect::NONE>{} };
-/// Preset Green
-auto Green{ Colorizer<Color::GREEN, Color::NONE, Effect::NONE>{} };
-/// Preset Yellow
-auto Yellow{ Colorizer<Color::YELLOW, Color::NONE, Effect::NONE>{} };
-/// Preset Blue
-auto Blue{ Colorizer<Color::BLUE, Color::NONE, Effect::NONE>{} };
-/// Preset Magenta
-auto Magenta{ Colorizer<Color::MAGENTA, Color::NONE, Effect::NONE>{} };
-/// Preset Cyan
-auto Cyan{ Colorizer<Color::CYAN, Color::NONE, Effect::NONE>{} };
 };
 };
 };
