@@ -37,3 +37,6 @@ target_compile_options(test
         -g3
         -O3
 )
+
+# Packaging
+export(TARGETS libfpr FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)
