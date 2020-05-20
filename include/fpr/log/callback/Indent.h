@@ -9,7 +9,7 @@ namespace log {
 class Indent
 {
     /// String for one indent.
-    static const string one_indent;
+    const string one_indent{ "    " };
     /// String for the current indent.
     string indent;
 
@@ -30,7 +30,5 @@ class Indent
         return buf.sputn(indent.c_str(), indent.size());
     }
 };
-/// Four spaces.
-const string Indent::one_indent{ "    " };
 };
 };
