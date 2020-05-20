@@ -1,4 +1,7 @@
+#pragma once
+
 #include <type_traits>
+
 namespace fpr {
 /// Used to invoke enumerator.
 class Enumerate
