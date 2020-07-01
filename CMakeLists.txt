@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.16)
 project(
   libfpr
   VERSION 0.1
-  LANGUAGES CXX
   DESCRIPTION "FPR's C++ library for personal use.")
 
 # clangd
@@ -26,4 +25,5 @@ target_compile_options(test PRIVATE -Wall -fno-exceptions -fno-rtti -g3 -O3)
 export(TARGETS libfpr FILE ${CMAKE_CURRENT_BINARY_DIR}/libfprConfig.cmake)
 
 # sources
-target_sources(libfpr PUBLIC src/util/fdstreambuf.cpp)
+target_sources(libfpr PUBLIC src/util/fdstreambuf.cpp src/util/repeat.cpp
+                             src/log/Location.cpp src/log/IndentGuard.cpp)

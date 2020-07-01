@@ -10,12 +10,7 @@ namespace log {
 /// @param os
 /// @param loc
 /// @return ostream&
-inline ostream&
-operator<<(ostream& os, const experimental::source_location& loc)
-{
-    os << loc.file_name() << ":" << loc.line() << ":" << loc.column() << " "
-       << loc.function_name();
-    return os;
-}
+ostream&
+operator<<(ostream& os, const experimental::source_location& loc);
 };
 };
