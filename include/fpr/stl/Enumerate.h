@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <utility>
 
 namespace fpr {
 /// Used to invoke enumerator.
@@ -76,4 +77,32 @@ operator|(T& t, Enumerate)
 {
     return Enumeration<T>{ t };
 };
+
+template<class T>
+struct ItrEnumeration
+{
+    std::remove_reference_t<T>& t;
+
+    struct iterator : public T::iterator
+    {
+        using Base = typename T::iterator;
+        using value_type =
+          std::pair<typename T::iterator, typename T::iterator::value_type>;
+
+        value_type operator*() { return { *this, Base::operator*() }; }
+    };
+
+    constexpr iterator begin() { return { t.begin() }; };
+    constexpr iterator end() { return { t.end() }; };
+};
+struct ItrEnumerate
+{};
+constexpr ItrEnumerate itr_enumerate;
+
+template<class T>
+ItrEnumeration<T> constexpr
+operator|(T& t, ItrEnumerate)
+{
+    return { t };
+}
 };
