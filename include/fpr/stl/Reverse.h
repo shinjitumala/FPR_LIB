@@ -7,14 +7,17 @@ namespace fpr {
 class Reverse
 {};
 constexpr Reverse reverse;
+template<class I>
+class ReverseWithItr
+{};
 
 /// Reverse an stl container with ease. Ranges v3 asap pls
 /// @tparam T
-template<class T>
+template<class T, class I = typename T::iterator>
 struct ReverseWrapper
 {
     using Contained = std::remove_reference_t<T>;
-    using ContainedIterator = typename Contained::iterator;
+    using ContainedIterator = I;
 
     ReverseWrapper(Contained& t)
       : t{ &t }
@@ -56,9 +59,15 @@ struct ReverseWrapper
 // };
 
 template<class T>
-// Reversed<T>
 ReverseWrapper<std::remove_reference_t<T>> constexpr
 operator|(T&& t, Reverse)
+{
+    return { t };
+}
+
+template<class T, class I>
+ReverseWrapper<std::remove_reference_t<T>, I> constexpr
+operator|(T& t, ReverseWithItr<I>)
 {
     return { t };
 }
