@@ -4,7 +4,7 @@ namespace fpr {
 void
 repeat(uint count, function<void()> action)
 {
-    for (auto i{ 0 }; i < count; i++) {
+    for (auto i{ 0U }; i < count; i++) {
         action();
     }
 }
