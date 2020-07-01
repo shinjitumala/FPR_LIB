@@ -9,10 +9,5 @@ using namespace std;
 /// @param count
 /// @param action
 void
-repeat(uint count, function<void()> action)
-{
-    for (auto i{ 0 }; i < count; i++) {
-        action();
-    }
-}
+repeat(uint count, function<void()> action);
 };
