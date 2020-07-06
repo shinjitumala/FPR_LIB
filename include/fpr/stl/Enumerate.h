@@ -9,100 +9,79 @@ class Enumerate
 {};
 constexpr Enumerate enumerate;
 
-/// Enumeration that gives a range based loop with index.
-/// @tparam T Container to iterate.
-template<class T, class Itr>
-struct EnumerationBase
+template<class T, class I = typename T::iterator>
+struct EnumerationItr : public I
 {
-    EnumerationBase(T& t)
-      : t{ &t }
+    using base_iterator = I;
+    /// Pair of index and the item at the index.
+    using value_type =
+      std::pair<const std::size_t, const typename I::reference>;
+
+  private:
+    /// Index of the item.
+    int pos;
+
+  public:
+    EnumerationItr(T& t, base_iterator itr)
+      : base_iterator{ itr }
+      , pos{ distance(t.begin(), itr) }
     {}
 
-    T* const t;
+    value_type operator*() { return { pos, base_iterator::operator*() }; }
 
-    /// Pair of index and the item at the index.
-    struct Item
+    EnumerationItr& operator++()
     {
-        const int index;
-        decltype(*t->begin())&& item;
-    };
-
-    /// Wrapper iterator
-    struct iterator : public Itr
-    {
-        using value_type = Item;
-
-        /// Index of the item.
-        int pos;
-
-        explicit iterator(T* t, Itr itr)
-          : Itr{ itr }
-          , pos{ distance(t->begin(), itr) }
-        {}
-
-        value_type operator*()
-        {
-            Item i{ pos, Itr::operator*() };
-            return i;
-        }
-
-        iterator& operator++()
-        {
-            pos++;
-            Itr::operator++();
-            return *this;
-        }
-    };
-
-    constexpr iterator begin() { return iterator{ t, t->begin() }; };
-    constexpr iterator end() { return iterator{ t, t->end() }; };
+        pos++;
+        base_iterator::operator++();
+        return *this;
+    }
 };
 
-template<class T, bool = std::is_const_v<T>>
-class Enumeration
-{};
+/// Enumeration that gives a range based loop with index.
+/// @tparam T Container to iterate.
+template<class T>
+struct EnumerationTmp : public T
+{
+    EnumerationTmp(T&& t)
+      : T{ std::move(t) }
+    {}
+    using iterator = EnumerationItr<T>;
+
+    iterator begin() { return { *this, this->T::begin() }; };
+    iterator end() { return { *this, this->T::end() }; };
+};
+
+template<class T, class I = typename T::iterator>
+struct EnumerationRef
+{
+    T& t;
+    EnumerationRef(T& t)
+      : t{ t }
+    {}
+
+    using iterator = EnumerationItr<T, I>;
+    iterator begin() const { return { t, t.begin() }; };
+    iterator end() const { return { t, t.end() }; };
+};
 
 template<class T>
-struct Enumeration<T, false> : public EnumerationBase<T, typename T::iterator>
-{};
+const EnumerationRef<const T, typename T::const_iterator> constexpr
+operator|(const T& t, Enumerate)
+{
+    return t;
+};
 
-template<class T>
-struct Enumeration<T, true>
-  : public EnumerationBase<T, typename T::const_iterator>
-{};
-
-template<class T>
-Enumeration<T> constexpr
+template<class T, std::enable_if_t<!std::is_const_v<T>, bool> = true>
+EnumerationRef<T> constexpr
 operator|(T& t, Enumerate)
 {
-    return Enumeration<T>{ t };
+    return t;
 };
 
-template<class T>
-struct ItrEnumeration
-{
-    std::remove_reference_t<T>& t;
-
-    struct iterator : public T::iterator
-    {
-        using Base = typename T::iterator;
-        using value_type =
-          std::pair<typename T::iterator, typename T::iterator::value_type>;
-
-        value_type operator*() { return { *this, Base::operator*() }; }
-    };
-
-    constexpr iterator begin() { return { t.begin() }; };
-    constexpr iterator end() { return { t.end() }; };
-};
-struct ItrEnumerate
-{};
-constexpr ItrEnumerate itr_enumerate;
-
-template<class T>
-ItrEnumeration<T> constexpr
-operator|(T& t, ItrEnumerate)
-{
-    return { t };
-}
+// template<class T>
+// EnumerationTmp<T> constexpr
+// operator|(T&& t, Enumerate)
+// {
+//     return EnumerationTmp<T>{ std::move(t) };
+// }
 };
