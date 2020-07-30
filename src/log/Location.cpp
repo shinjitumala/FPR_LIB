@@ -1,6 +1,6 @@
 #include <fpr/log/Location.h>
 
-namespace fpr{
+namespace fpr::log {
 ostream&
 operator<<(ostream& os, const experimental::source_location& loc)
 {

@@ -5,34 +5,34 @@
 
 namespace fpr {
 /// Used to invoke enumerator.
-class Enumerate
+class WithIndex
 {};
-constexpr Enumerate enumerate;
+constexpr WithIndex with_index;
 
-template<class T, class I = typename T::iterator>
-struct EnumerationItr : public I
+template<class T>
+struct IndexIterator : public decltype(std::declval<T>().begin())
 {
-    using base_iterator = I;
+    using Base = decltype(std::declval<T>().begin());
     /// Pair of index and the item at the index.
     using value_type =
-      std::pair<const std::size_t, const typename I::reference>;
+      std::pair<const std::size_t, const typename Base::reference>;
 
   private:
     /// Index of the item.
-    int pos;
+    std::size_t pos;
 
   public:
-    EnumerationItr(T& t, base_iterator itr)
-      : base_iterator{ itr }
-      , pos{ distance(t.begin(), itr) }
+    IndexIterator(std::size_t pos, Base itr)
+      : Base{ itr }
+      , pos{ pos }
     {}
 
-    value_type operator*() { return { pos, base_iterator::operator*() }; }
+    value_type operator*() { return { pos, Base::operator*() }; }
 
-    EnumerationItr& operator++()
+    IndexIterator& operator++()
     {
         pos++;
-        base_iterator::operator++();
+        Base::operator++();
         return *this;
     }
 };
@@ -40,48 +40,86 @@ struct EnumerationItr : public I
 /// Enumeration that gives a range based loop with index.
 /// @tparam T Container to iterate.
 template<class T>
-struct EnumerationTmp : public T
+struct WithIndexTmp : public T
 {
-    EnumerationTmp(T&& t)
+    WithIndexTmp(T&& t)
       : T{ std::move(t) }
     {}
-    using iterator = EnumerationItr<T>;
+    using iterator = IndexIterator<T>;
 
-    iterator begin() { return { *this, this->T::begin() }; };
-    iterator end() { return { *this, this->T::end() }; };
-};
-
-template<class T, class I = typename T::iterator>
-struct EnumerationRef
-{
-    T& t;
-    EnumerationRef(T& t)
-      : t{ t }
-    {}
-
-    using iterator = EnumerationItr<T, I>;
-    iterator begin() const { return { t, t.begin() }; };
-    iterator end() const { return { t, t.end() }; };
+    iterator begin() { return { 0, this->T::begin() }; };
+    iterator end() { return { this->size() - 1, this->T::end() }; };
 };
 
 template<class T>
-const EnumerationRef<const T, typename T::const_iterator> constexpr
-operator|(const T& t, Enumerate)
+struct WithIndexRef
+{
+    T& t;
+    WithIndexRef(T& t)
+      : t{ t }
+    {}
+
+    using iterator = IndexIterator<T>;
+    iterator begin() const { return { 0, t.begin() }; };
+    iterator end() const { return { t.size() - 1, t.end() }; };
+};
+
+template<class T>
+WithIndexTmp<T>
+operator|(T&& t, WithIndex)
+{
+    return move(t);
+}
+
+template<class T>
+WithIndexRef<T> constexpr
+operator|(T& t, WithIndex)
 {
     return t;
 };
 
-template<class T, std::enable_if_t<!std::is_const_v<T>, bool> = true>
-EnumerationRef<T> constexpr
-operator|(T& t, Enumerate)
+struct AsIterator
+{};
+constexpr AsIterator as_itr;
+
+template<class I>
+struct AsIteratorIterator : public I
 {
-    return t;
+    using value_type = I;
+    value_type operator*() { return *this; }
 };
 
-// template<class T>
-// EnumerationTmp<T> constexpr
-// operator|(T&& t, Enumerate)
-// {
-//     return EnumerationTmp<T>{ std::move(t) };
-// }
+template<class T>
+struct AsIteratorRef
+{
+    T& t;
+    using iterator = AsIteratorIterator<decltype(std::declval<T>().begin())>;
+    iterator begin() { return { t.begin() }; };
+    iterator end() { return { t.end() }; };
+};
+
+template<class T>
+struct AsIteratorTmp : public T
+{
+    AsIteratorTmp(T&& t)
+      : T{ std::move(t) } {};
+
+    using iterator = AsIteratorIterator<decltype(std::declval<T>().begin())>;
+
+    iterator begin() { return { T::begin() }; };
+    iterator end() { return { T::end() }; };
+};
+
+template<class T>
+AsIteratorRef<T>
+operator|(T& t, AsIterator)
+{
+    return { t };
+}
+template<class T>
+AsIteratorTmp<T>
+operator|(T&& t, AsIterator)
+{
+    return std::move(t);
+}
 };

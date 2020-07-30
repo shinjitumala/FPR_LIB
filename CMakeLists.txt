@@ -11,7 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # The Library
 add_library(libfpr STATIC)
-target_compile_features(libfpr PRIVATE cxx_std_20)
+target_compile_features(libfpr PRIVATE cxx_std_17)
 target_include_directories(libfpr PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(libfpr PRIVATE -Wall -fno-exceptions -fno-rtti -g3 -O3)
 
